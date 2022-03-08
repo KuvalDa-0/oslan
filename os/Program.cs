@@ -15,7 +15,7 @@ using System.Xml.Serialization;
         public string Model; //модель 
         public string Vypusk; //год
     }
-    class Person
+    class Personjson
     {
         public string Name { get; set; }
         public int Age { get; set; }
@@ -34,6 +34,8 @@ using System.Xml.Serialization;
                 Console.WriteLine("Работа с форматом JSON - 3");
                 Console.WriteLine("Работа с форматом XML - 4");
                 Console.WriteLine("Работа с zip архивами - 5");
+                Console.WriteLine("Демонстрация работоспособности - 6");
+
                 int vbr = Convert.ToInt32(Console.ReadLine());
 
                 switch (vbr)
@@ -173,8 +175,8 @@ using System.Xml.Serialization;
                                             string name = Console.ReadLine();
                                             Console.WriteLine("Введите возраст:");
                                             int age = Convert.ToInt32(Console.ReadLine());
-                                            Person tom = new Person() { Name = name, Age = age };
-                                            await JsonSerializer.SerializeAsync<Person>(fs, tom);
+                                            Personjson tom = new Personjson() { Name = name, Age = age };
+                                            await JsonSerializer.SerializeAsync<Personjson>(fs, tom);
                                         }
                                         break;
                                     }
@@ -185,7 +187,7 @@ using System.Xml.Serialization;
                                         {
                                             using (FileStream fs = new FileStream("Z://test/user.json", FileMode.OpenOrCreate))
                                             {
-                                                Person restoredPerson = await JsonSerializer.DeserializeAsync<Person>(fs);
+                                                Personjson restoredPerson = await JsonSerializer.DeserializeAsync<Personjson>(fs);
                                                 Console.WriteLine($"Name: {restoredPerson.Name}  Age: {restoredPerson.Age}");
                                             }
                                         }
@@ -290,7 +292,7 @@ using System.Xml.Serialization;
                         {
                             string zipfolder = "Z://test/0fold/";
                             string sourceFolder = "Z://test/"; // исходная папка
-                            string arhiv = "Z://test/test.zip";
+                            string arhiv = "Z://test/test1.zip";
                             string targetFolder = "Z://test/unziped"; // папка, куда распаковывается файл
                             Console.WriteLine("Выберите функцию:");
                             Console.WriteLine("Выйти в главное меню - 0");
@@ -394,6 +396,219 @@ using System.Xml.Serialization;
                                     }
                             }
 
+                            break;
+                        }
+                    case 6:
+                        {
+                            DriveInfo[] drives = DriveInfo.GetDrives();
+
+                            foreach (DriveInfo drive in drives)
+                            {
+                                Console.WriteLine($"Название: {drive.Name}");
+                                Console.WriteLine($"Тип: {drive.DriveType}");
+                                if (drive.IsReady)
+                                {
+                                    Console.WriteLine($"Объем диска: {drive.TotalSize}");
+                                    Console.WriteLine($"Свободное пространство: {drive.TotalFreeSpace}");
+                                    Console.WriteLine($"Метка: {drive.VolumeLabel}");
+                                }
+                                Console.WriteLine();
+                            }
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            int vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+                            
+
+                            string path = "Z://test/";
+                            DirectoryInfo dirInfo = new DirectoryInfo(path);
+                            if (!dirInfo.Exists)
+                            {
+                                dirInfo.Create();
+                            }
+                            using (FileStream fstream = new FileStream($"{path}\\note.txt", FileMode.Create))
+                            {
+                            }
+                            Console.WriteLine("Создан пустой файл note.txt");
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            string text = "qwerty";
+
+                            using (FileStream fstream = new FileStream($"{path}\\note.txt", FileMode.OpenOrCreate))
+                            {
+                                byte[] array = System.Text.Encoding.Default.GetBytes(text);
+
+                                await fstream.WriteAsync(array, 0, array.Length);
+                                Console.WriteLine("Текст qwerty записан в файл");
+                            }
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            using (FileStream fstream = File.OpenRead($"{path}\\note.txt"))
+                            {
+                                byte[] array = new byte[fstream.Length];
+
+                                await fstream.ReadAsync(array, 0, array.Length);
+
+                                string textFromFile = System.Text.Encoding.Default.GetString(array);
+                                Console.WriteLine($"Текст из файла: {textFromFile}");
+                            }
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            FileInfo fileInf = new FileInfo($"{path}\\note.txt");
+                            if (fileInf.Exists)
+                            {
+                                fileInf.Delete();
+                            }
+                            Console.WriteLine("Файл note.txt удален");
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            using (FileStream fs = new FileStream("Z://test/user.json", FileMode.OpenOrCreate))
+                            {
+                                Console.WriteLine("Имя: Oleg ");
+                                string name = "Oleg";
+                                Console.WriteLine("Возраст: 22");
+                                int age = 22;
+                                Personjson tom = new Personjson() { Name = name, Age = age };
+                                await JsonSerializer.SerializeAsync<Personjson>(fs, tom);
+                            }
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            using (FileStream fs = new FileStream("Z://test/user.json", FileMode.OpenOrCreate))
+                            {
+                                Personjson restoredPerson = await JsonSerializer.DeserializeAsync<Personjson>(fs);
+                                Console.WriteLine($"Name: {restoredPerson.Name}  Age: {restoredPerson.Age}");
+                            }
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            FileInfo fileInf0 = new FileInfo("Z://test/user.json");
+                            if (fileInf0.Exists)
+                            {
+                                fileInf0.Delete();
+                            }
+
+                            Console.WriteLine("Файл user.json удален");
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            Car avto = new Car(); //объявляем avto экземпляром класса
+                            Console.WriteLine("Данные автомобиля:");
+                            Console.Write("Марка: Lada ");
+                            avto.Marka = "Lada"; //считывает марку авто
+                            Console.Write("Модель: Kalina ");
+                            avto.Model = "Kalina"; //считывает модель авто
+                            Console.Write("Цвет: Silver ");
+                            avto.Cvet = "Silver"; //считывает цвет авто
+                            Console.Write("Год выпуска: 2015 ");
+                            avto.Vypusk = "2015"; //считывает год выпуска авто
+                            StreamWriter writer = new StreamWriter("Z://test/car.xml");
+                            XmlSerializer serializer = new XmlSerializer(typeof(Car));
+                            serializer.Serialize(writer, avto);
+                            writer.Close();
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            Car auto = new Car(); 
+                            Stream streamout = new FileStream("Z://test/car.xml", FileMode.Open, FileAccess.Read);
+                            XmlSerializer xml = new XmlSerializer(typeof(Car));
+                            auto = (Car)xml.Deserialize(streamout);
+                            streamout.Close();
+                            Console.WriteLine("Марка  " + "Модель  " + "Цвет  " + "Год выпуска  ");
+                            Console.WriteLine(auto.Marka + "    " + auto.Model + "    " + auto.Cvet + "    " + auto.Vypusk);
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            FileInfo fileInf1 = new FileInfo("Z://test/car.xml");
+                            if (fileInf1.Exists)
+                            {
+                                fileInf1.Delete();
+                            }
+                            Console.WriteLine("Файл car.xml удален");
+
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            string zipfolder = "Z://test/0fold/";
+                            string sourceFolder = "Z://test/"; // исходная папка
+                            string arhiv = "Z://test/test1.zip";
+                            string targetFolder = "Z://test/unziped"; // папка, куда распаковывается файл
+
+                            DirectoryInfo dirInfo2 = new DirectoryInfo(zipfolder);
+                            if (!dirInfo2.Exists)
+                            {
+                                dirInfo2.Create();
+                            }
+
+                            string text1 = "qwerty";
+
+                            using (FileStream fstream = new FileStream($"{path}\\note.txt", FileMode.OpenOrCreate))
+                            {
+                                byte[] array = System.Text.Encoding.Default.GetBytes(text1);
+
+                                await fstream.WriteAsync(array, 0, array.Length);
+                                Console.WriteLine("Текст qwerty записан в файл");
+                            }
+
+                            
+                            string zfile = "note.txt";
+                            string z1file = "Z://test/" + zfile;
+                            FileInfo fileInf2 = new FileInfo(z1file);
+                            if (fileInf2.Exists)
+                            {
+                                fileInf2.MoveTo(zipfolder + zfile);
+                            }
+                            ZipFile.CreateFromDirectory(zipfolder, "Z://test/test1.zip");
+
+                            Console.WriteLine("файл note.txt, заархивирован");
+
+                            Console.WriteLine("Продолжить? - 1");
+                            Console.WriteLine("Стоп - 0");
+                            vbr0 = Convert.ToInt32(Console.ReadLine());
+                            if (vbr0 == 0) { break; }
+
+                            DirectoryInfo dirInfo5 = new DirectoryInfo(targetFolder);
+                            if (!dirInfo5.Exists)
+                            {
+                                dirInfo5.Create();
+                            }
+                            ZipFile.ExtractToDirectory("Z://test/test1.zip", targetFolder);
+                            Console.WriteLine("файл note.txt, разархивирован");
                             break;
                         }
                 }
